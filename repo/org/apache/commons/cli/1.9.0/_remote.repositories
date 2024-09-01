@@ -1,0 +1,4 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Sun Sep 01 14:37:34 CEST 2024
+cli-1.9.0.jar>=
+cli-1.9.0.pom>=
