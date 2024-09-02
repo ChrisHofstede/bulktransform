@@ -1,2 +1,6 @@
 .vscode
 target
+in
+out
+html.xsl
+run.bat

@@ -54,7 +54,7 @@ public class Stylesheet implements Serializable {
 	 * @throws Exception
 	 *                   Signals that a non user recoverable error has occurred.
 	 */
-	public void setTranslet(String stylesheet) throws Exception {
+	private void setTranslet(File stylesheet) throws Exception {
 		if (stylesheet == null) {
 			throw new IllegalArgumentException("stylesheet is null");
 		}
@@ -64,17 +64,20 @@ public class Stylesheet implements Serializable {
 		final TransformerFactory tFactory = TransformerFactory.newInstance(
 				"org.apache.xalan.processor.TransformerFactoryImpl", null);
 
-		final File lf = new File(stylesheet);
-		if (lf.exists()) {
+		if (stylesheet.exists()) {
 			// Load the stylesheet from local file
-			try (InputStream fis = new FileInputStream(lf)) {
+			try (InputStream fis = new FileInputStream(stylesheet)) {
 				final Source xslt = new StreamSource(fis);
-				xslt.setSystemId(stylesheet);
+				xslt.setSystemId(stylesheet.getPath());
 				translet = tFactory.newTemplates(xslt);
 				if (translet == null)
 					throw new Exception("Could not parse style sheet (see previous error messages for details)");
 			}
 		}
+	}
+
+	Stylesheet(File stylesheet) throws Exception {
+		setTranslet(stylesheet);
 	}
 
 	/**

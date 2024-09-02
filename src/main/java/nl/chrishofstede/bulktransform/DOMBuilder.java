@@ -1,5 +1,6 @@
 package nl.chrishofstede.bulktransform;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -101,6 +102,27 @@ public class DOMBuilder implements Serializable {
 	 *                   Signals that a non user recoverable error has occurred.
 	 */
 	public final static Document parseDocumentAtPath(final String path) throws Exception {
+
+		// Set up the document builder
+		final DocumentBuilder builder = getDocumentBuilder();
+
+		// Load the XML file in DOM
+		return builder.parse(path);
+	}
+
+	/**
+	 * Parses an XML document and creates a <code>Document</code> interface
+	 * representation of the XML content.
+	 * 
+	 * @param path
+	 *             Path to document to be parsed in the servlet context.
+	 * @return Document interface representing the entire XML document.
+	 *         Conceptually, it is the root of the document
+	 *         tree, and provides the primary access to the document's data.
+	 * @throws Exception
+	 *                   Signals that a non user recoverable error has occurred.
+	 */
+	public final static Document parseDocumentAtPath(final File path) throws Exception {
 
 		// Set up the document builder
 		final DocumentBuilder builder = getDocumentBuilder();
