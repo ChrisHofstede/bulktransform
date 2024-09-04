@@ -1,6 +1,7 @@
 package nl.chrishofstede.bulktransform;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
@@ -14,6 +15,9 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOCase;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXParseException;
 
@@ -28,12 +32,12 @@ public class App {
     public static void main(String[] args) {
         // Set commandline options
         Options options = new Options();
-        Option inOption = new Option("in", "input", true, "input file name (wildcards allowed)");
+        Option inOption = new Option("in", "input", true, "input file name (wildcards allowed): -in in\\*.xml");
         inOption.setArgs(Option.UNLIMITED_VALUES);
         options.addOption(inOption);
-        Option xslOption = new Option("xsl", "xslt", true, "XSLT stylesheet input file name");
+        Option xslOption = new Option("xsl", "xslt", true, "XSLT stylesheet input file name: -xsl html.xsl");
         options.addOption(xslOption);
-        Option outOption = new Option("out", "output", true, "output folder");
+        Option outOption = new Option("out", "output", true, "output folder: -out out");
         options.addOption(outOption);
 
         String[] in = null;
@@ -76,7 +80,7 @@ public class App {
         }
         // Catch unhandled exceptions and report them in the log
         catch (final Exception e) {
-            System.err.println("Exception: " + getExceptionMessage(e));
+            System.err.println("Error: " + getExceptionMessage(e));
         }
     }
 
@@ -131,16 +135,27 @@ public class App {
             }
             Stylesheet stylesheet = new Stylesheet(xslFile);
             Parameters parameters = new Parameters();
+            WildcardFileFilter.Builder wildcardBuilder = WildcardFileFilter.builder();
+            wildcardBuilder.setIoCase(IOCase.SYSTEM);
             System.out.println("Processing input files...");
-            for (String inFile : in) {
-                System.out.println("in: " + inFile);
-                File inputXML = new File(inFile);
-                Document document = DOMBuilder.parseDocumentAtPath(inputXML);
-                File outFile = new File(outDirectory, inputXML.getName());
-                System.out.println("Transforming to: " + outFile.getAbsolutePath());
-                try (OutputStream outputXML = new FileOutputStream(outFile)) {
-                    stylesheet.transformNodeToStream(document, parameters, outputXML, null);
-			}
+            for (String inPathString : in) {
+                System.out.println("In: " + inPathString);
+                File inPath = new File(FileUtils.current(), inPathString);
+                File inDirectory = inPath.getParentFile();
+                if (inDirectory != null) {
+                    FileFilter fileFilter = wildcardBuilder.setWildcards(inPath.getName()).get();
+                    File[] inFiles = inDirectory.listFiles(fileFilter);
+                    for (File inFile : inFiles) {
+                        if (inFile.isFile()){
+                            Document document = DOMBuilder.parseDocumentAtPath(inFile);
+                            File outFile = new File(outDirectory, inFile.getName());
+                            System.out.println("Transforming to: " + outFile.getAbsolutePath());
+                            try (OutputStream outputXML = new FileOutputStream(outFile)) {
+                                stylesheet.transformNodeToStream(document, parameters, outputXML, null);
+                            }
+                        }
+                    }
+                }
             }
         }
     }

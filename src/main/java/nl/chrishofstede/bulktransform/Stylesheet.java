@@ -48,8 +48,7 @@ public class Stylesheet implements Serializable {
 	/**
 	 * Sets an XSL stylesheet translet from a file.
 	 * 
-	 * @param stylesheet
-	 *                   Stylesheet file name.
+	 * @param stylesheet Stylesheet file name.
 	 * @return Compiled stylesheet Templates.
 	 * @throws Exception
 	 *                   Signals that a non user recoverable error has occurred.
@@ -76,6 +75,12 @@ public class Stylesheet implements Serializable {
 		}
 	}
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param stylesheet Stylesheet file name.
+	 * @throws Exception Signals that a non user recoverable error has occurred.
+	 */
 	Stylesheet(File stylesheet) throws Exception {
 		setTranslet(stylesheet);
 	}

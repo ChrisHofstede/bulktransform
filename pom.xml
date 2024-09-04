@@ -57,6 +57,11 @@
       <artifactId>cli</artifactId>
       <version>1.9.0</version>
     </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>io</artifactId>
+      <version>2.16.1</version>
+    </dependency>
   </dependencies>
 
   <build>
