@@ -23,7 +23,24 @@
       <id>project-repo</id>
       <url>file://${project.basedir}/repo</url>
     </repository>
+    <repository>
+      <id>local-repo</id>
+      <url>file:///C:/local-repo</url>
+    </repository>
   </repositories>
+
+  <distributionManagement>
+    <repository>
+      <id>local-repo</id>
+      <name>local-repo-release</name>
+      <url>file:///C:/local-repo/releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>local-repo</id>
+      <name>local-repo-snapshot</name>
+      <url>file:///C:/local-repo/snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
 
   <dependencies>
     <dependency>
