@@ -14,8 +14,8 @@
   </properties>
 
   <scm>
-    <connection>scm:git:ssh://git@github.com:ChrisHofstede/bulktransform.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com:ChrisHofstede/bulktransform.git</developerConnection>
+    <connection>scm:git:ssh://git@github.com/ChrisHofstede/bulktransform.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/ChrisHofstede/bulktransform.git</developerConnection>
   </scm>
 
   <repositories>

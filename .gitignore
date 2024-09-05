@@ -1,5 +1,9 @@
 .vscode
-target
+#Maven
+target/
+#maven-release-plugin
+release.properties
+pom.xml.releaseBackup
 in
 out
 html.xsl
