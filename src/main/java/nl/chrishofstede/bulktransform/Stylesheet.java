@@ -67,10 +67,8 @@ public class Stylesheet implements Serializable {
 			// Load the stylesheet from local file
 			try (InputStream fis = new FileInputStream(stylesheet)) {
 				final Source xslt = new StreamSource(fis);
-				xslt.setSystemId(stylesheet.getPath());
+				xslt.setSystemId(stylesheet.toURI().toURL().toString());
 				translet = tFactory.newTemplates(xslt);
-				if (translet == null)
-					throw new Exception("Could not parse style sheet (see previous error messages for details)");
 			}
 		}
 	}
@@ -169,7 +167,7 @@ public class Stylesheet implements Serializable {
 	 * @throws Exception
 	 *                   Signals that a non user recoverable error has occurred.
 	 */
-	public void transformNodeToWriter(Node node, Parameters parameters, StringWriter result,
+	public void transformNodeToWriter(Node node, Parameters parameters, Writer result,
 			Writer log) throws Exception {
 		if (node == null || result == null) {
 			throw new IllegalArgumentException("node or result is null");
