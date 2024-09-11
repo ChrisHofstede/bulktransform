@@ -8,5 +8,4 @@ in
 out
 xsl
 schema
-html.xsl
 run.bat
