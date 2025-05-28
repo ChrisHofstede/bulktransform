@@ -13,7 +13,6 @@ import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.xerces.util.XMLCatalogResolver;
 import org.apache.xml.serializer.Method;
 import org.apache.xml.serializer.OutputPropertiesFactory;
 import org.apache.xml.serializer.Serializer;
@@ -22,9 +21,8 @@ import org.w3c.dom.DOMConfiguration;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 import nl.chrishofstede.bulktransform.utils.DOMErrorLogger;
 
@@ -47,28 +45,6 @@ public class DOMBuilder implements Serializable {
 			return documentBuilderFactory.newDocumentBuilder();
 		}
 
-	}
-
-	/**
-	 * Set the XML catalog file to be used with the XML parser.
-	 * 
-	 * @param catalog Path to the XML catalog file.
-	 * @throws Exception
-	 *                   Signals that a non user recoverable error has occurred.
-	 */
-	public final static void setCatalog(final String catalog) throws Exception {
-		XMLReader reader = XMLReaderFactory.createXMLReader();
-		String[] catalogs = { catalog };
-
-		// Create catalog resolver and set a catalog list.
-		XMLCatalogResolver resolver = new XMLCatalogResolver();
-		resolver.setPreferPublic(true);
-		resolver.setCatalogList(catalogs);
-
-		// Set the resolver on the parser.
-		reader.setProperty(
-				"http://apache.org/xml/properties/internal/entity-resolver",
-				resolver);
 	}
 
 	/**
@@ -151,6 +127,32 @@ public class DOMBuilder implements Serializable {
 
 		// Set up the document builder
 		final DocumentBuilder builder = getDocumentBuilder();
+
+		// Load the XML file in DOM
+		return builder.parse(path);
+	}
+
+	/**
+	 * Parses an XML document and creates a <code>Document</code> interface
+	 * representation of the XML content.
+	 * 
+	 * @param path
+	 *             Path to document to be parsed in the servlet context.
+	 * @return Document interface representing the entire XML document.
+	 *         Conceptually, it is the root of the document
+	 *         tree, and provides the primary access to the document's data.
+	 * @throws Exception
+	 *                   Signals that a non user recoverable error has occurred.
+	 */
+	public final static Document parseDocumentAtPath(final File path, EntityResolver EntityResolver) throws Exception {
+
+		// Set up the document builder
+		final DocumentBuilder builder = getDocumentBuilder();
+
+		// Set the entity resolver
+		if (EntityResolver != null) {	
+			builder.setEntityResolver(EntityResolver);
+		}
 
 		// Load the XML file in DOM
 		return builder.parse(path);

@@ -1,0 +1,26 @@
+<!DOCTYPE catalog PUBLIC "-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN" "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"
+      prefer="system">
+      <group prefer="system" xml:base="file:///C:/Workspace/bulktransform">
+
+            <public
+                  publicId="ISO 8879-1986//ENTITIES ISO Character Entities 20030531//EN//XML"
+                  uri="file:///C:/Workspace/bulktransform/ent/ISOEntities" />
+
+            <!--rewriteSystem
+                  systemIdStartString="ent/ISOEntities"
+                  rewritePrefix="file:///C:/Workspace/bulktransform/ent/ISOEntities" /-->
+
+            <!--rewriteURI
+                  uriStartString="ent/ISOEntities"
+                  rewritePrefix="file:///C:/Workspace/bulktransform/ent/ISOEntities" /-->
+
+            <system
+                  systemId="http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"
+                  uri="docbook45/docbookx.dtd" />
+
+            <system
+                  systemId="docbook4.5.dtd"
+                  uri="docbook45/docbookx.dtd" />
+      </group>
+</catalog>

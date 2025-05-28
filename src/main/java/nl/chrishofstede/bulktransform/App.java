@@ -18,6 +18,7 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
+import org.apache.xerces.util.XMLCatalogResolver;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXParseException;
 
@@ -40,11 +41,14 @@ public class App {
             options.addOption(xslOption);
             Option outOption = new Option("out", "output", true, "output folder: -out out");
             options.addOption(outOption);
+            Option catOption = new Option("cat", "catalog", true, "XML catalog file name: -cat catalog.xml");
+            options.addOption(catOption);
 
             // Option values
             String[] in = null;
             String xsl = null;
             String out = null;
+            String cat = null;
 
             // Create the parser
             CommandLineParser parser = new DefaultParser();
@@ -70,11 +74,15 @@ public class App {
                         out = line.getOptionValue(outOption);
                         System.out.println("out: " + out);
                     }
+                    if (line.hasOption(catOption)) {
+                        cat = line.getOptionValue(catOption);
+                        System.out.println("cat: " + cat);
+                    }
                 }
                 if (in == null || xsl == null || out == null) {
                     showHelp(options);
                 } else {
-                    transform(in, xsl, out);
+                    transform(in, xsl, out, cat);
                 }
             } catch (ParseException exp) {
                 // oops, something went wrong
@@ -115,7 +123,21 @@ public class App {
         return msg.toString();
     }
 
-    static void transform(String[] in, String xsl, String out) throws Exception {
+    /**
+     * Gets the XML catalog resolver to be used with the XML parser.
+     * 
+     * @param catalog Path to the XML catalog file.
+     * @throws Exception
+     *                   Signals that a non user recoverable error has occurred.
+     */
+    static XMLCatalogResolver getCatalogResolver(final String catalog) throws Exception {
+        String[] catalogs = { catalog };
+
+        // Create catalog resolver and set a catalog list.
+        return new XMLCatalogResolver(catalogs, false);
+    }
+
+    static void transform(String[] in, String xsl, String out, String catalog) throws Exception {
 
         // Check output directory and create one if it doesn't exist
         System.out.println("Checking: " + out);
@@ -129,6 +151,21 @@ public class App {
             if (!outDirectory.mkdirs()) {
                 System.out.println("Couldn't create out directory");
                 return;
+            }
+        }
+
+        // Check the catalog
+        XMLCatalogResolver catalogResolver = null;
+        if (catalog != null) {
+            System.out.println("Checking: " + catalog);
+            File catalogFile = new File(catalog);
+            if (catalogFile.exists()) {
+                if (catalogFile.isDirectory()) {
+                    System.out.println("catalog is a directory");
+                    return;
+                }
+                catalogResolver = getCatalogResolver(catalogFile.getAbsolutePath());
+                System.out.println("Using catalog: " + catalogFile.getAbsolutePath());
             }
         }
 
@@ -162,7 +199,8 @@ public class App {
                         if (inFile.isFile()) {
 
                             // Parse the input file
-                            Document document = DOMBuilder.parseDocumentAtPath(inFile);
+                            System.out.println("Parsing: " + inFile.getAbsolutePath());
+                            Document document = DOMBuilder.parseDocumentAtPath(inFile, catalogResolver);
 
                             // Set the transformed output file
                             File outFile = new File(outDirectory, inFile.getName());
