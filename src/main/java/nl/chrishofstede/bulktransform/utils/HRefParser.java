@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.URL;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 public class HRefParser {
 
@@ -24,7 +25,8 @@ public class HRefParser {
 	/**
 	 * Constructor.
 	 * 
-	 * @param href String containing the HRef.
+	 * @param href
+	 *             String containing the HRef.
 	 */
 	public HRefParser(final String href) {
 		this.href = href;
@@ -33,7 +35,8 @@ public class HRefParser {
 	/**
 	 * Sets the HREF for parsing.
 	 * 
-	 * @param hRef String containing the HRef.
+	 * @param hRef
+	 *             String containing the HRef.
 	 */
 	public void parse(final String hRef) {
 		this.href = hRef;
@@ -119,9 +122,11 @@ public class HRefParser {
 	 * Opens a connection to this HREF and returns an InputStream for reading from
 	 * that connection.
 	 * 
-	 * @throws IOException Signals that an I/O exception of some sort has occurred.
-	 *                     This class is the general class of exceptions produced by
-	 *                     failed or interrupted I/O operations.
+	 * @throws IOException
+	 *                     Signals that an I/O exception of some sort has occurred.
+	 *                     This class is the general class of
+	 *                     exceptions produced by failed or interrupted I/O
+	 *                     operations.
 	 * @return An input stream for reading from the HREF connection.
 	 */
 	public InputStream openStream() throws IOException {
@@ -135,23 +140,29 @@ public class HRefParser {
 
 	/**
 	 * Opens a connection to this HREF within the given context and returns an
-	 * InputStream for reading from that connection.
+	 * InputStream for reading from that
+	 * connection.
 	 * 
-	 * @param context The context in which to parse the HREF.
-	 * @throws IOException Signals that an I/O exception of some sort has occurred.
-	 *                     This class is the general class of exceptions produced by
-	 *                     failed or interrupted I/O operations.
+	 * @param context
+	 *                The context in which to parse the HREF.
+	 * @throws IOException
+	 *                            Signals that an I/O exception of some sort has
+	 *                            occurred.
+	 *                            This class is the general class of
+	 *                            exceptions produced by failed or interrupted I/O
+	 *                            operations.
+	 * @throws URISyntaxException
+	 *                            If the given context URL is not formatted
+	 *                            strictly.
 	 * @return An input stream for reading from the HREF connection.
 	 */
-	public InputStream openStream(final URL context) throws IOException {
+	public InputStream openStream(final URL context) throws IOException, URISyntaxException {
 		if (href == null || context == null) {
 			throw new IllegalArgumentException("href or context is null");
 		}
-		// Resolve a relative URL against a base URI
-		final URI base = URI.create(context.toString());
-		final URI resolved = base.resolve(href);
-
-		final URL url = resolved.toURL();
+		final URI uri = context.toURI();
+		final URI uriResult = uri.resolve(href);
+		final URL url = uriResult.toURL();
 		return url.openStream();
 	}
 
@@ -178,10 +189,14 @@ public class HRefParser {
 	/**
 	 * Verifies if the resource pointed by the HREF exists in a certain context.
 	 * 
-	 * @param context The context in which to verify the HREF.
+	 * @param context
+	 *                The context in which to verify the HREF.
+	 * @throws URISyntaxException
+	 *                            If the given context URL is not formatted
+	 *                            strictly.
 	 * @return True if the resource is accessible and thus exists.
 	 */
-	public boolean exists(final URL context) {
+	public boolean exists(final URL context) throws URISyntaxException {
 		if (context == null) {
 			throw new IllegalArgumentException("context is null");
 		}
@@ -189,11 +204,9 @@ public class HRefParser {
 
 			// Check if the resource pointed by the HREF exists by trying to open it.
 			if (href != null) {
-				// Resolve a relative URL against a base URI
-				final URI base = URI.create(context.toString());
-				final URI resolved = base.resolve(href);
-
-				final URL url = resolved.toURL();
+				final URI uri = context.toURI();
+				final URI uriResult = uri.resolve(href);
+				final URL url = uriResult.toURL();
 				try (InputStream input = url.openStream()) {
 					return true;
 				}
@@ -209,7 +222,8 @@ public class HRefParser {
 	/**
 	 * Unescapes escaped UTF-8 characters in a URL path to regular characters.
 	 * 
-	 * @param path URL path to be unescaped.
+	 * @param path
+	 *             URL path to be unescaped.
 	 * @return An unescaped URL path.
 	 */
 	public static String unescapeUrlPath(final String path) {
@@ -291,7 +305,8 @@ public class HRefParser {
 	/**
 	 * Indicates if some other object is "equal to" this one.
 	 * 
-	 * @param obj The reference object with which to compare.
+	 * @param obj
+	 *            The reference object with which to compare.
 	 * @return True if this object is the same as the object argument; false
 	 *         otherwise.
 	 */
@@ -302,8 +317,8 @@ public class HRefParser {
 
 	/**
 	 * Returns a hash code value for the object. This method is supported for the
-	 * benefit of hashtables such as those provided by
-	 * <code>java.util.Hashtable</code>.
+	 * benefit of hashtables such as those
+	 * provided by <code>java.util.Hashtable</code>.
 	 * 
 	 * @return a hash code value for this object.
 	 */
