@@ -27,7 +27,7 @@ public class TransformerLoggingErrorListener implements ErrorListener {
 	 * @param writer
 	 *               Writer to receive the log output
 	 */
-	public TransformerLoggingErrorListener(Writer writer) {
+	public TransformerLoggingErrorListener(final Writer writer) {
 		this.writer = writer;
 	}
 
@@ -55,7 +55,7 @@ public class TransformerLoggingErrorListener implements ErrorListener {
 	 * @see javax.xml.transform.TransformerException
 	 */
 	@Override
-	public void warning(TransformerException exception) throws TransformerException {
+	public void warning(final TransformerException exception) throws TransformerException {
 		printMessage(exception);
 	}
 
@@ -79,7 +79,7 @@ public class TransformerLoggingErrorListener implements ErrorListener {
 	 * @see javax.xml.transform.TransformerException
 	 */
 	@Override
-	public void error(TransformerException exception) throws TransformerException {
+	public void error(final TransformerException exception) throws TransformerException {
 		printMessage(exception);
 
 		// throw exception;
@@ -105,7 +105,7 @@ public class TransformerLoggingErrorListener implements ErrorListener {
 	 * @see javax.xml.transform.TransformerException
 	 */
 	@Override
-	public void fatalError(TransformerException exception) throws TransformerException {
+	public void fatalError(final TransformerException exception) throws TransformerException {
 		printMessage(exception);
 
 		// Unrecoverable error
@@ -121,7 +121,7 @@ public class TransformerLoggingErrorListener implements ErrorListener {
 	 *                              This class specifies an exceptional condition
 	 *                              that occurred during the transformation process.
 	 */
-	public void printMessage(Throwable exception) throws TransformerException {
+	public void printMessage(final Throwable exception) throws TransformerException {
 		try {
 			SourceLocator locator = null;
 			Throwable cause = exception;

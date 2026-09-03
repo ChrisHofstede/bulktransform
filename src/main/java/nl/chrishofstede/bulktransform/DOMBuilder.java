@@ -164,7 +164,7 @@ public class DOMBuilder implements Serializable {
 	 * @throws Exception
 	 *                   Signals that a non user recoverable error has occurred.
 	 */
-	public final static Document parseDocumentStream(InputStream input) throws Exception {
+	public final static Document parseDocumentStream(final InputStream input) throws Exception {
 		if (input == null) {
 			throw new IllegalArgumentException("input is null");
 		}
@@ -186,7 +186,7 @@ public class DOMBuilder implements Serializable {
 	 * @throws Exception
 	 *                   Signals that a non user recoverable error has occurred.
 	 */
-	public final static void serializeXML(Document document, OutputStream out) throws Exception {
+	public final static void serializeXML(final Document document, final OutputStream out) throws Exception {
 		if (document == null || out == null) {
 			throw new IllegalArgumentException("document or out is null");
 		}
@@ -212,7 +212,7 @@ public class DOMBuilder implements Serializable {
 	 * @throws Exception
 	 *                   Signals that a non user recoverable error has occurred.
 	 */
-	public final static void serializeXML(Document document, String file) throws Exception {
+	public final static void serializeXML(final Document document, final String file) throws Exception {
 		if (document == null || file == null) {
 			throw new IllegalArgumentException("document or file is null");
 		}
@@ -230,7 +230,7 @@ public class DOMBuilder implements Serializable {
 	 * @param node
 	 *             Root node which is searched for white space.
 	 */
-	public final static void compactWhiteSpace(Node node) {
+	public final static void compactWhiteSpace(final Node node) {
 		if (node != null) {
 			switch (node.getNodeType()) {
 
@@ -273,7 +273,7 @@ public class DOMBuilder implements Serializable {
 	 *                 Child node to be appended.
 	 * @return The child node appended.
 	 */
-	public final static Node appendChild(Node parent, Node newChild) {
+	public final static Node appendChild(final Node parent, final Node newChild) {
 		if (parent == null) {
 			throw new IllegalArgumentException("parent is null");
 		}
@@ -297,7 +297,7 @@ public class DOMBuilder implements Serializable {
 	 *                 Logs the errors and warnings in the document
 	 * @return True if the document is valid. Warnings are however ignored.
 	 */
-	public final static boolean validate(Document document, Writer log) {
+	public final static boolean validate(final Document document, final Writer log) {
 
 		// Setup DOM error handler
 		final DOMErrorLogger errorHandler = new DOMErrorLogger(log);
@@ -327,7 +327,7 @@ public class DOMBuilder implements Serializable {
 	 * @param document
 	 *                 Document to be normalized.
 	 */
-	public final static void normalize(Document document) {
+	public final static void normalize(final Document document) {
 
 		// Set the DOM configuration
 		final DOMConfiguration config = document.getDomConfig();

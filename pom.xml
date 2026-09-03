@@ -11,6 +11,12 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
+  <profiles>
+    <profile>
+      <id>default</id>
+    </profile>
+  </profiles>
+
   <scm>
     <connection>scm:git:ssh://git@github.com/ChrisHofstede/bulktransform.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/ChrisHofstede/bulktransform.git</developerConnection>

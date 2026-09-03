@@ -17,7 +17,7 @@ public class NodeWriter {
 	 *             Root of the node tree.
 	 * @return The string with the content of the node tree.
 	 */
-	public static String writeNode(Node node) {
+	public static String writeNode(final Node node) {
 		final StringWriter writer = new StringWriter();
 		if (node != null) {
 			write(writer, node);
@@ -33,7 +33,7 @@ public class NodeWriter {
 	 *             Root of the node tree.
 	 * @return The string with the content of the node tree.
 	 */
-	public static String writeChildNodes(Node node) {
+	public static String writeChildNodes(final Node node) {
 		final StringWriter writer = new StringWriter();
 		if (node != null) {
 			Node child = node.getFirstChild();
@@ -54,7 +54,7 @@ public class NodeWriter {
 	 * @param node
 	 *               The current node.
 	 */
-	private static void write(StringWriter writer, Node node) {
+	private static void write(final StringWriter writer, final Node node) {
 		if (node != null) {
 
 			final short type = node.getNodeType();
@@ -190,7 +190,7 @@ public class NodeWriter {
 	 * @param isAttValue
 	 *                   Indicates if the value is an attribute value.
 	 */
-	private static void normalizeAndWrite(StringWriter writer, String value, boolean isAttValue) {
+	private static void normalizeAndWrite(final StringWriter writer, final String value, final boolean isAttValue) {
 		if (value != null) {
 			final int len = value.length();
 			for (int i = 0; i < len; i++) {

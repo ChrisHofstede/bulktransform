@@ -29,16 +29,16 @@ import nl.chrishofstede.bulktransform.utils.Parameters;
  */
 public class App {
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         try {
             // Set commandline options
-            Options options = new Options();
-            Option inOption = new Option("in", "input", true, "input file name (wildcards allowed): -in in\\*.xml");
+            final Options options = new Options();
+            final Option inOption = new Option("in", "input", true, "input file name (wildcards allowed): -in in\\*.xml");
             inOption.setArgs(Option.UNLIMITED_VALUES);
             options.addOption(inOption);
-            Option xslOption = new Option("xsl", "xslt", true, "XSLT stylesheet input file name: -xsl html.xsl");
+            final Option xslOption = new Option("xsl", "xslt", true, "XSLT stylesheet input file name: -xsl html.xsl");
             options.addOption(xslOption);
-            Option outOption = new Option("out", "output", true, "output folder: -out out");
+            final Option outOption = new Option("out", "output", true, "output folder: -out out");
             options.addOption(outOption);
 
             // Option values
@@ -47,14 +47,14 @@ public class App {
             String out = null;
 
             // Create the parser
-            CommandLineParser parser = new DefaultParser();
+            final CommandLineParser parser = new DefaultParser();
             try {
                 // Parse the command line arguments
-                CommandLine line = parser.parse(options, args);
+                final CommandLine line = parser.parse(options, args);
                 if (line.hasOption(inOption)) {
                     in = line.getOptionValues(inOption);
                     boolean bFirst = true;
-                    for (String inFile : in) {
+                    for (final String inFile : in) {
                         if (bFirst) {
                             System.out.println("in : " + inFile);
                             bFirst = false;
@@ -76,7 +76,7 @@ public class App {
                 } else {
                     transform(in, xsl, out);
                 }
-            } catch (ParseException exp) {
+            } catch (final ParseException exp) {
                 // oops, something went wrong
                 System.err.println("Commandline parsing failed.  Reason: " + exp.getMessage());
             }
@@ -87,12 +87,12 @@ public class App {
         }
     }
 
-    static void showHelp(Options options) {
-        HelpFormatter formatter = HelpFormatter.builder().get();
+    static void showHelp(final Options options) {
+        final HelpFormatter formatter = HelpFormatter.builder().get();
         formatter.printHelp("Command line syntax:", options);
     }
 
-    public static String getExceptionMessage(Exception exception) {
+    public static String getExceptionMessage(final Exception exception) {
         final StringWriter msg = new StringWriter();
         msg.write(exception.getClass().getName() + ": ");
 
@@ -115,11 +115,11 @@ public class App {
         return msg.toString();
     }
 
-    static void transform(String[] in, String xsl, String out) throws Exception {
+    static void transform(final String[] in, final String xsl, final String out) throws Exception {
 
         // Check output directory and create one if it doesn't exist
         System.out.println("Checking: " + out);
-        File outDirectory = new File(out);
+        final File outDirectory = new File(out);
         if (outDirectory.exists()) {
             if (outDirectory.isFile()) {
                 System.out.println("out directory is a file");
@@ -134,7 +134,7 @@ public class App {
 
         // Check the stylesheet
         System.out.println("Checking: " + xsl);
-        File xslFile = new File(xsl);
+        final File xslFile = new File(xsl);
         if (xslFile.exists()) {
             if (xslFile.isDirectory()) {
                 System.out.println("xsl is a directory");
@@ -142,30 +142,30 @@ public class App {
             }
 
             // Create translet from the stylesheet
-            Stylesheet stylesheet = new Stylesheet(xslFile);
-            Parameters parameters = new Parameters(); // Future expansion
+            final Stylesheet stylesheet = new Stylesheet(xslFile);
+            final Parameters parameters = new Parameters(); // Future expansion
 
             // Find the input files
-            WildcardFileFilter.Builder wildcardBuilder = WildcardFileFilter.builder();
+            final WildcardFileFilter.Builder wildcardBuilder = WildcardFileFilter.builder();
             wildcardBuilder.setIoCase(IOCase.SYSTEM);
             System.out.println("Processing input files...");
-            for (String inPathString : in) {
+            for (final String inPathString : in) {
                 System.out.println("In: " + inPathString);
-                File inPath = new File(FileUtils.current(), inPathString);
-                File inDirectory = inPath.getParentFile();
+                final File inPath = new File(FileUtils.current(), inPathString);
+                final File inDirectory = inPath.getParentFile();
                 if (inDirectory != null) {
 
                     // Process the wildcard matches if used
-                    FileFilter fileFilter = wildcardBuilder.setWildcards(inPath.getName()).get();
-                    File[] inFiles = inDirectory.listFiles(fileFilter);
-                    for (File inFile : inFiles) {
+                    final FileFilter fileFilter = wildcardBuilder.setWildcards(inPath.getName()).get();
+                    final File[] inFiles = inDirectory.listFiles(fileFilter);
+                    for (final File inFile : inFiles) {
                         if (inFile.isFile()) {
 
                             // Parse the input file
-                            Document document = DOMBuilder.parseDocumentAtPath(inFile);
+                            final Document document = DOMBuilder.parseDocumentAtPath(inFile);
 
                             // Set the transformed output file
-                            File outFile = new File(outDirectory, inFile.getName());
+                            final File outFile = new File(outDirectory, inFile.getName());
                             System.out.println("Transforming to: " + outFile.getAbsolutePath());
                             try (OutputStream outputXML = new FileOutputStream(outFile)) {
 

@@ -53,7 +53,7 @@ public class Stylesheet implements Serializable {
 	 * @throws Exception
 	 *                   Signals that a non user recoverable error has occurred.
 	 */
-	private void setTranslet(File stylesheet) throws Exception {
+	private void setTranslet(final File stylesheet) throws Exception {
 		if (stylesheet == null) {
 			throw new IllegalArgumentException("stylesheet is null");
 		}
@@ -79,7 +79,7 @@ public class Stylesheet implements Serializable {
 	 * @param stylesheet Stylesheet file name.
 	 * @throws Exception Signals that a non user recoverable error has occurred.
 	 */
-	Stylesheet(File stylesheet) throws Exception {
+	Stylesheet(final File stylesheet) throws Exception {
 		setTranslet(stylesheet);
 	}
 
@@ -98,7 +98,7 @@ public class Stylesheet implements Serializable {
 	 * @throws Exception
 	 *                   Signals that a non user recoverable error has occurred.
 	 */
-	public void transformNodeToNode(Node node, Parameters parameters, Node result, Writer log)
+	public void transformNodeToNode(final Node node, final Parameters parameters, final Node result, final Writer log)
 			throws Exception {
 		if (node == null || result == null) {
 			throw new IllegalArgumentException("node or result is null");
@@ -121,8 +121,8 @@ public class Stylesheet implements Serializable {
 	 * @throws Exception
 	 *                   Signals that a non user recoverable error has occurred.
 	 */
-	public void transformNodeToResult(Node node, Parameters parameters, Result result,
-			Writer log) throws Exception {
+	public void transformNodeToResult(final Node node, final Parameters parameters, final Result result,
+			final Writer log) throws Exception {
 		if (node == null || result == null) {
 			throw new IllegalArgumentException("node or result is null");
 		}
@@ -144,8 +144,8 @@ public class Stylesheet implements Serializable {
 	 * @throws Exception
 	 *                   Signals that a non user recoverable error has occurred.
 	 */
-	public void transformNodeToStream(Node node, Parameters parameters, OutputStream result,
-			Writer log) throws Exception {
+	public void transformNodeToStream(final Node node, final Parameters parameters, final OutputStream result,
+			final Writer log) throws Exception {
 		if (node == null || result == null) {
 			throw new IllegalArgumentException("node or result is null");
 		}
@@ -167,8 +167,8 @@ public class Stylesheet implements Serializable {
 	 * @throws Exception
 	 *                   Signals that a non user recoverable error has occurred.
 	 */
-	public void transformNodeToWriter(Node node, Parameters parameters, Writer result,
-			Writer log) throws Exception {
+	public void transformNodeToWriter(final Node node, final Parameters parameters, final Writer result,
+			final Writer log) throws Exception {
 		if (node == null || result == null) {
 			throw new IllegalArgumentException("node or result is null");
 		}
@@ -187,7 +187,7 @@ public class Stylesheet implements Serializable {
 	 * @throws Exception
 	 *                   Signals that a non user recoverable error has occurred.
 	 */
-	public String transformNodeToString(Node node, Parameters parameters) throws Exception {
+	public String transformNodeToString(final Node node, final Parameters parameters) throws Exception {
 		if (node == null) {
 			throw new IllegalArgumentException("node is null");
 		}
@@ -200,8 +200,8 @@ public class Stylesheet implements Serializable {
 		return stringWriter.toString();
 	}
 
-	private void transformSourceToResult(Source source, Parameters parameters, Result result,
-			Writer log) throws Exception {
+	private void transformSourceToResult(final Source source, final Parameters parameters, final Result result,
+			final Writer log) throws Exception {
 
 		// Obtain a transformer
 		final Transformer transformer = getTransformer();
