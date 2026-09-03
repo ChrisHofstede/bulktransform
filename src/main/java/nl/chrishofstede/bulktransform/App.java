@@ -11,10 +11,10 @@ import javax.xml.transform.TransformerException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.help.HelpFormatter;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
@@ -32,13 +32,19 @@ public class App {
     public static void main(final String[] args) {
         try {
             // Set commandline options
+            final String since = "1.0";
             final Options options = new Options();
-            final Option inOption = new Option("in", "input", true, "input file name (wildcards allowed): -in in\\*.xml");
+            final Option inOption = Option.builder("in").longOpt("input").hasArgs().argName("input file name (wildcards allowed)")
+            .desc("input file name (wildcards allowed): -in in\\*.xml").since(since).get();
             inOption.setArgs(Option.UNLIMITED_VALUES);
             options.addOption(inOption);
-            final Option xslOption = new Option("xsl", "xslt", true, "XSLT stylesheet input file name: -xsl html.xsl");
+
+            final Option xslOption = Option.builder("xsl").longOpt("xslt").hasArg().argName("XSLT stylesheet input file name")
+            .desc("XSLT stylesheet input file name: -xsl html.xsl").since(since).get();
             options.addOption(xslOption);
-            final Option outOption = new Option("out", "output", true, "output folder: -out out");
+
+            final Option outOption = Option.builder("out").longOpt("output").hasArg().argName("output folder")
+            .desc("output folder: -out out").since(since).get();
             options.addOption(outOption);
 
             // Option values
@@ -87,9 +93,10 @@ public class App {
         }
     }
 
-    static void showHelp(final Options options) {
+    static void showHelp(final Options options) throws Exception {
         final HelpFormatter formatter = HelpFormatter.builder().get();
-        formatter.printHelp("Command line syntax:", options);
+        formatter.printHelp("bulktransform", "Command line options:", options,
+                "Example: bulktransform -in \"in\\*.xml\" -xsl html.xsl -out out", true);
     }
 
     public static String getExceptionMessage(final Exception exception) {
