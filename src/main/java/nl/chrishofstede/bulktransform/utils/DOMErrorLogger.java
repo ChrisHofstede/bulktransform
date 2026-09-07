@@ -24,7 +24,7 @@ public class DOMErrorLogger implements org.w3c.dom.DOMErrorHandler {
 	 * @param writer
 	 *               Writer to receive the log output
 	 */
-	public DOMErrorLogger(Writer writer) {
+	public DOMErrorLogger(final Writer writer) {
 		this.writer = writer;
 	}
 
@@ -44,7 +44,7 @@ public class DOMErrorLogger implements org.w3c.dom.DOMErrorHandler {
 	 *         depending on <code>DOMError.severity</code>.
 	 */
 	@Override
-	public boolean handleError(DOMError error) {
+	public boolean handleError(final DOMError error) {
 		boolean bNonFatal = true;
 		try {
 			switch (error.getSeverity()) {

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class HRefParser {
 
@@ -26,7 +28,7 @@ public class HRefParser {
 	 * @param href
 	 *             String containing the HRef.
 	 */
-	public HRefParser(String href) {
+	public HRefParser(final String href) {
 		this.href = href;
 	}
 
@@ -36,7 +38,7 @@ public class HRefParser {
 	 * @param hRef
 	 *             String containing the HRef.
 	 */
-	public void parse(String hRef) {
+	public void parse(final String hRef) {
 		this.href = hRef;
 	}
 
@@ -131,7 +133,8 @@ public class HRefParser {
 		if (href == null) {
 			throw new IllegalArgumentException("href is null");
 		}
-		final URL url = new URL(href);
+		final URI uri = URI.create(href);
+		final URL url = uri.toURL();
 		return url.openStream();
 	}
 
@@ -143,17 +146,23 @@ public class HRefParser {
 	 * @param context
 	 *                The context in which to parse the HREF.
 	 * @throws IOException
-	 *                     Signals that an I/O exception of some sort has occurred.
-	 *                     This class is the general class of
-	 *                     exceptions produced by failed or interrupted I/O
-	 *                     operations.
+	 *                            Signals that an I/O exception of some sort has
+	 *                            occurred.
+	 *                            This class is the general class of
+	 *                            exceptions produced by failed or interrupted I/O
+	 *                            operations.
+	 * @throws URISyntaxException
+	 *                            If the given context URL is not formatted
+	 *                            strictly.
 	 * @return An input stream for reading from the HREF connection.
 	 */
-	public InputStream openStream(URL context) throws IOException {
+	public InputStream openStream(final URL context) throws IOException, URISyntaxException {
 		if (href == null || context == null) {
 			throw new IllegalArgumentException("href or context is null");
 		}
-		final URL url = new URL(context, href);
+		final URI uri = context.toURI();
+		final URI uriResult = uri.resolve(href);
+		final URL url = uriResult.toURL();
 		return url.openStream();
 	}
 
@@ -182,9 +191,12 @@ public class HRefParser {
 	 * 
 	 * @param context
 	 *                The context in which to verify the HREF.
+	 * @throws URISyntaxException
+	 *                            If the given context URL is not formatted
+	 *                            strictly.
 	 * @return True if the resource is accessible and thus exists.
 	 */
-	public boolean exists(URL context) {
+	public boolean exists(final URL context) throws URISyntaxException {
 		if (context == null) {
 			throw new IllegalArgumentException("context is null");
 		}
@@ -192,7 +204,9 @@ public class HRefParser {
 
 			// Check if the resource pointed by the HREF exists by trying to open it.
 			if (href != null) {
-				final URL url = new URL(context, href);
+				final URI uri = context.toURI();
+				final URI uriResult = uri.resolve(href);
+				final URL url = uriResult.toURL();
 				try (InputStream input = url.openStream()) {
 					return true;
 				}
@@ -212,7 +226,7 @@ public class HRefParser {
 	 *             URL path to be unescaped.
 	 * @return An unescaped URL path.
 	 */
-	public static String unescapeUrlPath(String path) {
+	public static String unescapeUrlPath(final String path) {
 		final StringWriter writer = new StringWriter();
 		if (path != null) {
 			final int len = path.length();
@@ -297,7 +311,7 @@ public class HRefParser {
 	 *         otherwise.
 	 */
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		return (href != null) ? href.equals(obj) : false;
 	}
 

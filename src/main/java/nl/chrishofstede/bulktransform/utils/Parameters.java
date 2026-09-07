@@ -6,19 +6,19 @@ import java.util.Properties;
 
 public class Parameters extends Properties implements Iterable<String> {
 
-	public String setParameter(String key, Object value) {
+	public String setParameter(final String key, final Object value) {
 		return (String) super.setProperty(key, value.toString());
 	}
 
-	public String setParameter(String key, String value) {
+	public String setParameter(final String key, final String value) {
 		return (String) super.setProperty(key, value);
 	}
 
-	public String getParameter(String key) {
+	public String getParameter(final String key) {
 		return super.getProperty(key);
 	}
 
-	public String removeParameter(String key) {
+	public String removeParameter(final String key) {
 		return (String) super.remove(key);
 	}
 
@@ -37,7 +37,7 @@ public class Parameters extends Properties implements Iterable<String> {
 		/** Index of the current element. */
 		private final Enumeration<?> keys;
 
-		KeyIterator(Enumeration<?> keys) {
+		KeyIterator(final Enumeration<?> keys) {
 			this.keys = keys;
 		}
 
