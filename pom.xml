@@ -3,7 +3,7 @@
   <groupId>nl.chrishofstede.bulktransform</groupId>
   <artifactId>bulktransform</artifactId>
   <packaging>jar</packaging>
-  <version>1.3.0-SNAPSHOT</version>
+  <version>1.3.0</version>
   <name>bulktransform</name>
   <url>http://maven.apache.org</url>
 
@@ -20,7 +20,7 @@
   <scm>
     <connection>scm:git:ssh://git@github.com/ChrisHofstede/bulktransform.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/ChrisHofstede/bulktransform.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>bulktransform-1.3.0</tag>
   </scm>
 
   <repositories>
