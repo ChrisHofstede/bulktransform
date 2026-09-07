@@ -18,7 +18,8 @@ import org.apache.commons.cli.help.HelpFormatter;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
-import org.apache.xerces.util.XMLCatalogResolver;
+import org.apache.xml.resolver.CatalogManager;
+import org.apache.xml.resolver.tools.CatalogResolver;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXParseException;
 
@@ -140,11 +141,15 @@ public class App {
      * @throws Exception
      *                   Signals that a non user recoverable error has occurred.
      */
-    static XMLCatalogResolver getCatalogResolver(final String catalog) throws Exception {
-        final String[] catalogs = { catalog };
+    static CatalogResolver getCatalogResolver(final String catalog) throws Exception {
 
         // Create catalog resolver and set a catalog list.
-        return new XMLCatalogResolver(catalogs, false);
+        final CatalogManager catalogManager = new CatalogManager();
+        catalogManager.setCatalogFiles(catalog);
+        // catalogManager.setVerbosity(4); // 0=none, 1=normal, 2=verbose, 3=debug
+        catalogManager.setVerbosity(1);
+        catalogManager.setIgnoreMissingProperties(true);
+        return new CatalogResolver(catalogManager);
     }
 
     static void transform(final String[] in, final String xsl, final String out, final String catalog) throws Exception {
@@ -165,7 +170,7 @@ public class App {
         }
 
         // Check the catalog
-        XMLCatalogResolver catalogResolver = null;
+        CatalogResolver catalogResolver = null;
         if (catalog != null) {
             System.out.println("Checking: " + catalog);
             final File catalogFile = new File(catalog);
