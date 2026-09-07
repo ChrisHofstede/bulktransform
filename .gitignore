@@ -7,5 +7,8 @@ pom.xml.releaseBackup
 in
 out
 xsl
+ent
 schema
 run.bat
+catalog.xml
+XML Entity and URI Resolvers.html

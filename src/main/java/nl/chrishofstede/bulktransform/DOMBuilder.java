@@ -13,6 +13,7 @@ import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.xml.resolver.tools.CatalogResolver;
 import org.apache.xml.serializer.Method;
 import org.apache.xml.serializer.OutputPropertiesFactory;
 import org.apache.xml.serializer.Serializer;
@@ -126,6 +127,34 @@ public class DOMBuilder implements Serializable {
 
 		// Set up the document builder
 		final DocumentBuilder builder = getDocumentBuilder();
+
+		// Load the XML file in DOM
+		return builder.parse(path);
+	}
+
+	/**
+	 * Parses an XML document and creates a <code>Document</code> interface
+	 * representation of the XML content.
+	 * 
+	 * @param path
+	 *             Path to document to be parsed in the servlet context.
+	 * @param catalogResolver
+	 *             Catalog resolver to be used with the XML parser.
+	 * @return Document interface representing the entire XML document.
+	 *         Conceptually, it is the root of the document
+	 *         tree, and provides the primary access to the document's data.
+	 * @throws Exception
+	 *                   Signals that a non user recoverable error has occurred.
+	 */
+	public final static Document parseDocumentAtPath(final File path, final CatalogResolver catalogResolver) throws Exception {
+
+		// Set up the document builder
+		final DocumentBuilder builder = getDocumentBuilder();
+
+		// Set the entity resolver
+		if (catalogResolver != null) {	
+			builder.setEntityResolver(catalogResolver);
+		}
 
 		// Load the XML file in DOM
 		return builder.parse(path);
